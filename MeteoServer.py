@@ -16,7 +16,7 @@ def handleRedisCnx():
         conn.ping()
         redisCnxStatus = 'OK'
     except Exception as exception:
-        redisCnxStatus = 'Error - ' + exception.__class__.__name__ + " " + os.getenv('REDIS_HOST', 'localhost')
+        redisCnxStatus = 'Error - ' + exception.__class__.__name__ + " " + os.getenv('REDIS_HOST', 'redis_server')
         conn = None
 
 
