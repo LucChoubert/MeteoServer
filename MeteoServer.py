@@ -10,14 +10,13 @@ def handleRedisCnx():
     global conn
     try:
         if conn is None:
-            print(os.getenv('REDIS_HOST', 'localhost'))
             conn = redis.StrictRedis(
                 host=os.getenv('REDIS_HOST', 'localhost'),
                 port=6379)
         conn.ping()
         redisCnxStatus = 'OK'
     except Exception as exception:
-        redisCnxStatus = 'Error - ' + exception.__class__.__name__
+        redisCnxStatus = 'Error - ' + exception.__class__.__name__ + " " + os.getenv('REDIS_HOST', 'localhost')
         conn = None
 
 
