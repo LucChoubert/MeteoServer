@@ -27,8 +27,6 @@ conn = None
 
 handleRedisCnx()
 
-print('CECI EST UN TEST')
-
 @app.route("/")
 def root():
     var = "OK\n"
