@@ -11,7 +11,7 @@ def handleRedisCnx():
     try:
         if conn is None:
             conn = redis.StrictRedis(
-                host=os.getenv('REDIS_HOST', 'localhost'),
+                host=os.getenv('REDIS_HOST', 'redis_server'),
                 port=6379)
         conn.ping()
         redisCnxStatus = 'OK'
