@@ -1,3 +1,5 @@
+#!/bin/sh
+
 docker stop api_server
 docker rm api_server
 
