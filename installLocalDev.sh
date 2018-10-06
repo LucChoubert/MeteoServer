@@ -13,4 +13,3 @@ echo --------------------------------------------------------
 echo You have installed successfully the localdev environment
 echo You can run the server with runLocalDev.sh
 echo --------------------------------------------------------
-
