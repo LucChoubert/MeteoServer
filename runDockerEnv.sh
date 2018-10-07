@@ -15,6 +15,8 @@ docker run --name redis_server --network application-net -d -p 6379:6379 redis
 
 docker run --name api_server --network application-net -d -p 5000:5000 meteoserver
 
+docker ps
+
 # connect for debugging
 # docker exec -i -t 8dfef789c123 /bin/bash
 
