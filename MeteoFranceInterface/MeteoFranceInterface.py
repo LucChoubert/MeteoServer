@@ -67,7 +67,55 @@ def getDataFromMeteoFranceAPI( iCityCode ):
     return meteoTable
 
 
+def getDataFromMeteoFranceAPI2( iCityCode ):
+    #For Debug Purpose
+    #pp = pprint.PrettyPrinter()
+
+    #url='http://www.meteo-france.mobi/ws/getDetail/france/060180.json'
+    #url = 'http://ws.meteofrance.com/ws/getDetail/france/060180.json'
+
+    url = 'http://ws.meteofrance.com/ws/getDetail/france/' + iCityCode + '.json'
+
+    biotMFResp = requests.get(url)
+    biotMFParsed = biotMFResp.json()
+    biotMFResp.close()
+
+    #pp.pprint(biotMFParsed)
+
+    city = biotMFParsed['result']['ville']['nom']
+    extractionTime = time.strftime("%d-%B-%Y-%H:%M", time.localtime())
+
+    listeKeys = ['0_matin', '0_midi', '0_soir', '0_nuit']
+    listeKeys.extend(['1_matin', '1_midi', '1_soir', '1_nuit'])
+    listeKeys.extend(['2_matin', '2_midi', '2_soir', '2_nuit'])
+    listeKeys.extend(['3_matin', '3_midi', '3_soir', '3_nuit'])
+    listeKeys.extend(['4_matin', '4_midi', '4_soir', '4_nuit'])
+    listeKeys.extend(['5_matin', '5_midi', '5_soir', '5_nuit'])
+    listeKeys.extend(['6_matin', '6_midi', '6_soir', '6_nuit'])
+
+    resultDict = {}
+    for k in listeKeys:
+        if k in biotMFParsed['result']['previsions']:
+            #            print(k+" "+str(biotMFParsed['result']['previsions'][k]['date'])+" "+biotMFParsed['result']['previsions'][k]['moment']+" "+biotMFParsed['result']['previsions'][k]['description']+" "+biotMFParsed['result']['previsions'][k]['temperatureMin']+" "+biotMFParsed['result']['previsions'][k]['temperatureMax']+" "+biotMFParsed['result']['previsions'][k]['vitesseVent'])
+            timeValue1 = time.gmtime(biotMFParsed['result']['previsions'][k]['date'] / 1000)
+            if biotMFParsed['result']['previsions'][k]['moment'] == 'nuit':
+                timeValue1 = time.gmtime(biotMFParsed['result']['previsions'][k]['date'] / 1000 + 86400)
+            key = time.strftime("%d-%B-%Y", timeValue1)+'-'+biotMFParsed['result']['previsions'][k]['moment']
+            value = biotMFParsed['result']['previsions'][k]['description']+'-'+biotMFParsed['result']['previsions'][k]['temperatureCarte']+'-'+biotMFParsed['result']['previsions'][k]['vitesseVent']            
+            resultDict[key] = value
+
+    return city, extractionTime, resultDict
+
+
+
 if __name__ == '__main__':
     aCityCode = getCityCodeFromName("biot")
-    table = getDataFromMeteoFranceAPI( aCityCode )
-    print(table)
+    city, extractionTime, resultDict = getDataFromMeteoFranceAPI2( aCityCode )
+    
+    #For Debug Purpose
+    pp = pprint.PrettyPrinter()    
+    pp.pprint(city)
+    pp.pprint(extractionTime)
+    pp.pprint(resultDict)
+
+    
