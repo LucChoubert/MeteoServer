@@ -1,4 +1,4 @@
 #!/bin/sh
 
-docker build
+docker build -t meteoserver .
 
