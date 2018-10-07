@@ -52,5 +52,12 @@ def meteo2():
     handleRedisCnx()
     aCityCode = MeteoFranceInterface.MeteoFranceInterface.getCityCodeFromName("biot")
     table = MeteoFranceInterface.MeteoFranceInterface.getDataFromMeteoFranceAPI( aCityCode )
-    table = table
     return table.get_string() + "\n"
+
+@app.route("/meteo/biot/redis")
+def meteo3():
+    handleRedisCnx()
+    aCityCode = MeteoFranceInterface.MeteoFranceInterface.getCityCodeFromName("biot")
+    city, extractionTime, resultDict = getDataFromMeteoFranceAPI2( aCityCode )
+    conn.hmset(city+'-'+extractionTime,resultDict)
+    return "OK"
