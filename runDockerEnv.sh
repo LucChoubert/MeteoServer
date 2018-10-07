@@ -18,7 +18,7 @@ docker run --name redis-server --network application-net -d -p 6379:6379 redis
 
 docker run --name api-server --network application-net -d -p 5000:5000 meteoserver
 
-docker run --name redis-commander --network application-net -d -p 8081:8081 redis-commander:arm
+docker run --name redis-commander --network application-net --env REDIS_HOSTS=PRD:redis-server:6379 -d -p 8081:8081 redis-commander:arm
 
 docker ps
 
