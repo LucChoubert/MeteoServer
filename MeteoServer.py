@@ -58,6 +58,6 @@ def meteo2():
 def meteo3():
     handleRedisCnx()
     aCityCode = MeteoFranceInterface.MeteoFranceInterface.getCityCodeFromName("biot")
-    city, extractionTime, resultDict = getDataFromMeteoFranceAPI2( aCityCode )
+    city, extractionTime, resultDict = MeteoFranceInterface.MeteoFranceInterface.getDataFromMeteoFranceAPI2( aCityCode )
     conn.hmset(city+'-'+extractionTime,resultDict)
     return "OK"
