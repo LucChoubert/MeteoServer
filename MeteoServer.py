@@ -1,31 +1,15 @@
-import os
+import RedisHandler.RedisHandler
 
 from flask import Flask, request
 import MeteoFranceInterface.MeteoFranceInterface
 
-import redis
-
-def handleRedisCnx():
-    global redisCnxStatus
+def handleRedisCnx(): 
     global conn
-    try:
-        if conn is None:
-            conn = redis.StrictRedis(
-                host=os.getenv('REDIS_HOST', 'redis-server'),
-                port=6379)
-        conn.ping()
-        redisCnxStatus = 'OK'
-    except Exception as exception:
-        redisCnxStatus = 'Error - ' + exception.__class__.__name__ + " " + os.getenv('REDIS_HOST', 'redis-server')
-        conn = None
-
+    redisCnxStatus,conn = RedisHandler.RedisHandler.handleRedisCnx(conn)
+    return redisCnxStatus
 
 app = Flask(__name__)
-
-redisCnxStatus = None
 conn = None
-
-handleRedisCnx()
 
 @app.route("/")
 def root():
@@ -34,7 +18,7 @@ def root():
 
 @app.route("/status")
 def status():
-    handleRedisCnx()
+    redisCnxStatus = handleRedisCnx()
     var = "API Flask Server Up and Running\n"
     var = var + "Connection from: " + request.user_agent.string + "\n"
     var = var + "Redis Connection: " + redisCnxStatus + "\n"
@@ -42,21 +26,21 @@ def status():
 
 @app.route("/meteo/biot/web")
 def meteo1():
-    handleRedisCnx()
+    redisCnxStatus = handleRedisCnx()
     aCityCode = MeteoFranceInterface.MeteoFranceInterface.getCityCodeFromName("biot")
     table = MeteoFranceInterface.MeteoFranceInterface.getDataFromMeteoFranceAPI( aCityCode )
     return table.get_html_string()
 
 @app.route("/meteo/biot/string")
 def meteo2():
-    handleRedisCnx()
+    redisCnxStatus = handleRedisCnx()
     aCityCode = MeteoFranceInterface.MeteoFranceInterface.getCityCodeFromName("biot")
     table = MeteoFranceInterface.MeteoFranceInterface.getDataFromMeteoFranceAPI( aCityCode )
     return table.get_string() + "\n"
 
 @app.route("/meteo/biot/redis")
 def meteo3():
-    handleRedisCnx()
+    redisCnxStatus = handleRedisCnx()
     aCityCode = MeteoFranceInterface.MeteoFranceInterface.getCityCodeFromName("biot")
     city, extractionTime, resultDict = MeteoFranceInterface.MeteoFranceInterface.getDataFromMeteoFranceAPI2( aCityCode )
     conn.hmset(city+'-'+extractionTime,resultDict)

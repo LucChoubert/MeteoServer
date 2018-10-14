@@ -25,4 +25,6 @@ docker ps
 # connect for debugging
 # docker exec -i -t 8dfef789c123 /bin/bash
 
+# Daemon runs like this: python3 MeteoRetrieverDaemon.py
+# And stop like this: pkill -f -TERM *Daemon*
 

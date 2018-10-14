@@ -3,3 +3,4 @@ requests
 pprint
 prettytable
 redis
+python-daemon
