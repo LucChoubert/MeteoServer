@@ -6,17 +6,20 @@ import MeteoFranceInterface.MeteoFranceInterface
 import RedisHandler.RedisHandler
 
 def shutdown(signum, frame):  # signum and frame are mandatory
-    print("EXITING NOW")
+    print("MeteoRetrieverDaemon - EXITING NOW")
     sys.exit(0)
     
 def get_meteo():
+    global conn
     while True:
-        print("HELLO")
-        global conn
-        redisCnxStatus,conn = RedisHandler.RedisHandler.handleRedisCnx(conn)
-        aCityCode = MeteoFranceInterface.MeteoFranceInterface.getCityCodeFromName("biot")
-        city, extractionTime, resultDict = MeteoFranceInterface.MeteoFranceInterface.getDataFromMeteoFranceAPI2( aCityCode )
-        #conn.hmset(city+'-'+extractionTime,resultDict)
+        print("MeteoRetrieverDaemon - Retrieving Meteo France data - "+time.strftime("%d/%m/%Y %H:%M:%S"))
+        try:
+            redisCnxStatus,conn = RedisHandler.RedisHandler.handleRedisCnx(conn)
+            aCityCode = MeteoFranceInterface.MeteoFranceInterface.getCityCodeFromName("biot")
+            city, extractionTime, resultDict = MeteoFranceInterface.MeteoFranceInterface.getDataFromMeteoFranceAPI2( aCityCode )
+            conn.hmset(city+'-'+extractionTime,resultDict)
+        except Exception as exception:
+            print("...Exception caught")
         time.sleep(60)
 
 

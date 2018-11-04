@@ -3,6 +3,7 @@ import json
 import pprint
 import prettytable
 import time
+import datetime
 
 
 def getCityCodeFromName( iCityName):
@@ -106,7 +107,15 @@ def getDataFromMeteoFranceAPI2( iCityCode ):
 
     return city, extractionTime, resultDict
 
-
+def format( city, extractionTime, resultDict ):
+    meteoTable = prettytable.PrettyTable(['date', 'moment', 'prevision', 'Temp', 'Vent'])
+    for k,v in resultDict.items():
+       day, month, year, moment = k.decode('utf-8').split('-')
+       description, temp, vent = v.decode('utf-8').split('-')
+       aDateTime = datetime.datetime.strptime(day+'/'+month+'/'+year, "%d/%B/%Y")
+       #meteoTable.add_row([day+'/'+month+'/'+year ,moment, description, temp, vent])
+       meteoTable.add_row([aDateTime.strftime("%d %b %Y, %a") ,moment, description, temp, vent])
+    return meteoTable
 
 if __name__ == '__main__':
     aCityCode = getCityCodeFromName("biot")
