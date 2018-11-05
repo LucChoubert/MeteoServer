@@ -20,7 +20,7 @@ def get_meteo():
             conn.hmset(city+'-'+extractionTime,resultDict)
         except Exception as exception:
             print("...Exception caught")
-        time.sleep(60)
+        time.sleep(600)
 
 
 conn = None 
