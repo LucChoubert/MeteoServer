@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY MeteoServer.py requirements.txt ./
 COPY MeteoFranceInterface ./MeteoFranceInterface
+COPY RedisHandler ./RedisHandler
 
 RUN pip install -r requirements.txt
 
