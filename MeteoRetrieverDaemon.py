@@ -24,7 +24,7 @@ def get_meteo():
 
 
 conn = None 
-with daemon.DaemonContext(stdout=sys.stdout,stderr=sys.stderr, signal_map={
+with daemon.DaemonContext(detach_process=False,stdout=sys.stdout,stderr=sys.stderr, signal_map={
             signal.SIGTERM: shutdown,
             signal.SIGTSTP: shutdown
         }):
