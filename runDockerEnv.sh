@@ -12,8 +12,12 @@ docker rm redis-server
 docker stop redis-commander
 docker rm redis-commander
 
+docker stop webui-server
+docker rm webui-server
+
 #docker build -t meteoserver -f Dockerfile.meteoserver .
 #docker build -t meteodaemon -f Dockerfile.meteodaemon .
+#docker build -t webui -f Dockerfile.webui .
 
 docker network create --driver bridge application-net
 
@@ -30,6 +34,11 @@ docker run --name api-server --network application-net -d -p 5000:5000 meteoserv
 
 #Daemon getting the data from MeteoFrance and storing in Redis
 docker run --name retriever-daemon --network application-net -d meteodaemon
+
+#NGINX server for the UI and facade to API server
+docker run --name webui-server --network application-net -d -p 80:80 webui
+
+## Tools Section
 
 #Web Interface for Redis database view
 docker run --name redis-commander --network application-net --env REDIS_HOSTS=PRD:redis-server:6379 -d -p 8081:8081 redis-commander:arm

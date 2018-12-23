@@ -2,10 +2,4 @@ FROM nginx:alpine
 
 COPY WebUI /usr/share/nginx/html
 
-
-######
-#WORKDIR /app
-
-#EXPOSE 5000
-
-#CMD ["flask", "run", "--host=0.0.0.0"]
+EXPOSE 80
