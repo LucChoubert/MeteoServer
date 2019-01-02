@@ -12,12 +12,12 @@ def handleRedisCnx():
 app = Flask(__name__)
 conn = None
 
-@app.route("/")
+@app.route("/api")
 def root():
-    var = "OK\n"
+    var = "MeteoServer API OK\n"
     return var
 
-@app.route("/status")
+@app.route("/api/status")
 def status():
     redisCnxStatus = handleRedisCnx()
     var = "API Flask Server Up and Running\n"
@@ -25,21 +25,21 @@ def status():
     var = var + "Redis Connection: " + redisCnxStatus + "\n"
     return var
 
-@app.route("/meteo/biot/web")
+@app.route("/api/meteo/biot/web")
 def meteo1():
     redisCnxStatus = handleRedisCnx()
     aCityCode = MeteoFranceInterface.MeteoFranceInterface.getCityCodeFromName("biot")
     table = MeteoFranceInterface.MeteoFranceInterface.getDataFromMeteoFranceAPI( aCityCode )
     return table.get_html_string()
 
-@app.route("/meteo/biot/string")
+@app.route("/api/meteo/biot/string")
 def meteo2():
     redisCnxStatus = handleRedisCnx()
     aCityCode = MeteoFranceInterface.MeteoFranceInterface.getCityCodeFromName("biot")
     table = MeteoFranceInterface.MeteoFranceInterface.getDataFromMeteoFranceAPI( aCityCode )
     return table.get_string() + "\n"
 
-@app.route("/meteo/biot/web/redis")
+@app.route("/api/meteo/biot/web/redis")
 def meteo3():
     redisCnxStatus = handleRedisCnx()
     aCityCode = MeteoFranceInterface.MeteoFranceInterface.getCityCodeFromName("biot")
