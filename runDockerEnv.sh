@@ -1,19 +1,22 @@
 #!/bin/sh
 
-docker stop api-server
-docker rm api-server
+docker stop redis-server
+docker rm redis-server
 
 docker stop retriever-daemon
 docker rm retriever-daemon
 
-docker stop redis-server
-docker rm redis-server
+docker stop api-server
+docker rm api-server
+
+docker stop webui-server
+docker rm webui-server
 
 docker stop redis-commander
 docker rm redis-commander
 
-docker stop webui-server
-docker rm webui-server
+docker stop portainer
+docker rm portainer
 
 #docker build -t meteoserver -f Dockerfile.meteoserver .
 #docker build -t meteodaemon -f Dockerfile.meteodaemon .
@@ -24,19 +27,18 @@ docker network create --driver bridge application-net
 docker pull redis
 
 
-
 #RUN the various elements of the environment
 #Redis Server
 docker run --name redis-server --network application-net -d -p 6379:6379 redis
 
-#Meteo API Server
-docker run --name api-server --network application-net -d -p 5000:5000 meteoserver
-
 #Daemon getting the data from MeteoFrance and storing in Redis
 docker run --name retriever-daemon --network application-net -d meteodaemon
 
+#Meteo API Server
+docker run --name api-server --network application-net -d  meteoserver
+
 #NGINX server for the UI and facade to API server
-docker run --name webui-server --network application-net -d -p 80:80 webui
+docker run --name webui-server --network application-net -d -p 80:80  webui
 
 ## Tools Section
 

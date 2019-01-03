@@ -1,7 +1,7 @@
 FROM nginx:alpine
 
-COPY WebUI/*.htm* /usr/share/nginx/html
-COPY WebUI/*js /usr/share/nginx/html
-COPY WebUI/*.conf /etc/nginx/conf.d
+COPY WebUI/*.htm* /usr/share/nginx/html/
+COPY WebUI/*js /usr/share/nginx/html/
+COPY WebUI/*.conf /etc/nginx/conf.d/
 
 EXPOSE 80
